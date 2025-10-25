@@ -1,0 +1,50 @@
+<!-- Overlay (fond sombre semi-transparent) -->
+<div 
+  class="drawer-overlay" 
+  [class.open]="drawerOpen$ | async"
+  (click)="closeDrawer()">
+</div>
+
+<!-- Drawer (menu latéral) -->
+<aside class="drawer" [class.open]="drawerOpen$ | async">
+  
+  <!-- Header du Drawer -->
+  <div class="drawer-header">
+    <h2>Features</h2>
+    <p>Sélectionnez une fonctionnalité</p>
+  </div>
+
+  <!-- Liste des Features -->
+  <nav class="drawer-content">
+    <a 
+      *ngFor="let feature of features"
+      class="drawer-item"
+      [class.active]="(currentFeature$ | async)?.id === feature.id"
+      (click)="selectFeature(feature.route)">
+      
+      <!-- Icône de la feature -->
+      <span class="material-icons">{{ feature.icon }}</span>
+      
+      <!-- Contenu : nom et description -->
+      <div class="drawer-item-content">
+        <span class="drawer-item-title">{{ feature.name }}</span>
+        <span class="drawer-item-desc">{{ feature.description }}</span>
+      </div>
+      
+      <!-- Chevron à droite -->
+      <span class="material-icons chevron">chevron_right</span>
+    </a>
+  </nav>
+
+  <!-- Footer du Drawer -->
+  <div class="drawer-footer">
+    <a class="drawer-item" (click)="closeDrawer()">
+      <span class="material-icons">settings</span>
+      <span class="drawer-item-title">Paramètres</span>
+    </a>
+    <a class="drawer-item" (click)="closeDrawer()">
+      <span class="material-icons">help</span>
+      <span class="drawer-item-title">Aide</span>
+    </a>
+  </div>
+</aside>

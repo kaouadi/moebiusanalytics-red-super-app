@@ -1,0 +1,26 @@
+<!-- Bottom Navigation Bar -->
+<nav 
+  class="bottom-nav" 
+  *ngIf="(currentServices$ | async) as services"
+  [class.visible]="services.length > 0">
+  
+  <a 
+    *ngFor="let service of services"
+    [routerLink]="service.route"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{exact: false}"
+    class="nav-item"
+    [attr.aria-label]="service.name">
+    
+    <!-- Icône avec badge optionnel -->
+    <span class="nav-icon">
+      <span class="material-icons">{{ service.icon }}</span>
+      <span *ngIf="service.badge && service.badge > 0" class="badge">
+        {{ service.badge > 99 ? '99+' : service.badge }}
+      </span>
+    </span>
+    
+    <!-- Label du service -->
+    <span class="nav-label">{{ service.name }}</span>
+  </a>
+</nav>

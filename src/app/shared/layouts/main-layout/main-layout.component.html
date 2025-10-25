@@ -1,0 +1,32 @@
+<div class="main-layout">
+  <!-- Header -->
+  <header class="header">
+    <button 
+      class="menu-btn" 
+      (click)="navService.toggleDrawer()"
+      aria-label="Menu de navigation">
+      <span class="material-icons">menu</span>
+    </button>
+    
+    <h1 class="header-title">
+      {{ (navService.currentFeature$ | async)?.name || 'App' }}
+    </h1>
+    
+    <div class="header-actions">
+      <button class="icon-btn" aria-label="Notifications">
+        <span class="material-icons">notifications</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Drawer (Menu latéral) -->
+  <app-drawer></app-drawer>
+
+  <!-- Main Content -->
+  <main class="content">
+    <ng-content></ng-content>
+  </main>
+
+  <!-- Bottom Navigation -->
+  <app-bottom-navigation></app-bottom-navigation>
+</div>

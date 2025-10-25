@@ -1,0 +1,153 @@
+.main-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  max-width: 414px;
+  margin: 0 auto;
+  background: #fff;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+// Header
+.header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 100;
+  min-height: 56px;
+  position: relative;
+}
+
+.menu-btn,
+.icon-btn {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.2s;
+  position: relative;
+  min-width: 40px;
+  min-height: 40px;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  &:active {
+    background: rgba(255, 255, 255, 0.25);
+    transform: scale(0.95);
+  }
+
+  .material-icons {
+    font-size: 24px;
+  }
+}
+
+.notification-badge {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 18px;
+  height: 18px;
+  background: #ff5252;
+  border-radius: 50%;
+  border: 2px solid white;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.header-title {
+  font-size: 20px;
+  font-weight: 600;
+  flex: 1;
+  text-align: center;
+  margin: 0 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.header-actions {
+  width: 40px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+// Main Content
+.content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-bottom: 72px; // Espace pour la bottom nav
+  background: #f8f9fa;
+  
+  // Smooth scrolling
+  -webkit-overflow-scrolling: touch;
+  
+  // Custom scrollbar
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+
+    &:hover {
+      background: #555;
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 360px) {
+  .header {
+    padding: 12px;
+  }
+
+  .header-title {
+    font-size: 18px;
+  }
+
+  .menu-btn,
+  .icon-btn {
+    min-width: 36px;
+    min-height: 36px;
+    padding: 6px;
+
+    .material-icons {
+      font-size: 20px;
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .main-layout {
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .main-layout {
+    max-width: 1024px;
+  }
+}
