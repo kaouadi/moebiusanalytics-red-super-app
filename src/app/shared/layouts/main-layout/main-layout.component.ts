@@ -22,7 +22,6 @@ export class MainLayoutComponent implements OnInit {
     this.drawerOpen$ = this.navService.drawerOpen$;
     this.currentFeature$ = this.navService.currentFeature$;
 
-    // ✅ SOLUTION 2 : Avec type guard complet
     this.router.events.pipe(
       filter((event: RouterEvent): event is NavigationEnd => {
         return event instanceof NavigationEnd;
