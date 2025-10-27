@@ -1,3 +1,4 @@
+// navigation.service.ts
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -11,7 +12,6 @@ import { NavigationDataService } from './navigation-data.service';
 })
 export class NavigationService {
   
-  // Observables pour les composants
   drawerOpen$: Observable<boolean>;
   currentFeature$: Observable<Feature | null>;
   currentServices$: Observable<Service[]>;
@@ -31,7 +31,6 @@ export class NavigationService {
     this.navigationData$ = this.store.select(NavigationSelectors.selectNavigationData);
   }
 
-  // Actions
   toggleDrawer(): void {
     this.store.dispatch(NavigationActions.toggleDrawer());
   }
@@ -48,7 +47,18 @@ export class NavigationService {
     this.store.dispatch(NavigationActions.setCurrentFeature({ featureId }));
   }
 
-  // Getters synchrones (si nécessaire)
+  /**
+   * Définit la feature courante en fonction d'une route
+   * @param routeSegment Premier segment de l'URL (ex: 'documentation', 'tests')
+   */
+  setCurrentFeatureByRoute(routeSegment: string): void {
+    const featureId = this.navigationDataService.getFeatureIdByRoute(routeSegment);
+    
+    if (featureId) {
+      this.setCurrentFeature(featureId);
+    }
+  }
+
   getFeatures(): Feature[] {
     return this.navigationDataService.getFeatures();
   }

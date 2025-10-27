@@ -1,3 +1,4 @@
+// main-layout.component.ts
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd, Event as RouterEvent } from '@angular/router';
 import { filter } from 'rxjs/operators';
@@ -36,11 +37,30 @@ export class MainLayoutComponent implements OnInit {
   }
 
   private updateCurrentFeature(url: string): void {
-    if (url.includes('/documentation')) {
-      this.navService.setCurrentFeature('documentation');
-    } else if (url.includes('/tests')) {
-      this.navService.setCurrentFeature('tests');
+    // Extraire le premier segment de l'URL
+    const firstSegment = this.extractFirstSegment(url);
+    
+    if (firstSegment) {
+      // Déléguer la logique au service
+      this.navService.setCurrentFeatureByRoute(firstSegment);
     }
+  }
+
+  /**
+   * Extrait le premier segment de l'URL
+   * Exemples:
+   * - '/documentation/guides' -> 'documentation'
+   * - '/tests/run' -> 'tests'
+   * - '/dashboard' -> 'dashboard'
+   */
+  private extractFirstSegment(url: string): string {
+    // Retirer les query params et fragments
+    const cleanUrl = url.split('?')[0].split('#')[0];
+    
+    // Extraire le premier segment
+    const segments = cleanUrl.split('/').filter(segment => segment.length > 0);
+    
+    return segments[0] || '';
   }
 
   toggleDrawer(): void {
