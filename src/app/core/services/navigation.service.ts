@@ -15,10 +15,16 @@ export class NavigationService {
   drawerOpen$: Observable<boolean>;
   currentFeature$: Observable<Feature | null>;
   currentServices$: Observable<Service[]>;
+  defaultService$: Observable<Service | undefined>;
+  defaultServiceUrl$: Observable<string | null>;
+
   navigationData$: Observable<{
     drawerOpen: boolean;
     currentFeature: Feature | null;
     currentServices: Service[];
+    defaultService: Service | undefined;
+    defaultServiceUrl: string | null;
+
   }>;
 
   constructor(
@@ -28,7 +34,10 @@ export class NavigationService {
     this.drawerOpen$ = this.store.select(NavigationSelectors.selectDrawerOpen);
     this.currentFeature$ = this.store.select(NavigationSelectors.selectCurrentFeature);
     this.currentServices$ = this.store.select(NavigationSelectors.selectCurrentServices);
+    this.defaultService$ = this.store.select(NavigationSelectors.selectDefaultService);
+    this.defaultServiceUrl$ = this.store.select(NavigationSelectors.selectDefaultServiceUrl);
     this.navigationData$ = this.store.select(NavigationSelectors.selectNavigationData);
+ 
   }
 
   toggleDrawer(): void {

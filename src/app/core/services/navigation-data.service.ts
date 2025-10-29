@@ -1,6 +1,6 @@
 // navigation-data.service.ts
 import { Injectable } from '@angular/core';
-import { FeatureConfig } from '../models/feature.model';
+import { FeatureConfig, Service } from '../models/feature.model';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,7 @@ export class NavigationDataService {
         description: 'Guides et références'
       },
       services: [
-        { id: 'guides', name: 'Guides', icon: 'menu_book', route: '/documentation/guides' },
+        { id: 'guides', name: 'Guides', icon: 'menu_book', route: '/documentation/guides', default: true },
         { id: 'tutorials', name: 'Tutorials', icon: 'school', route: '/documentation/tutorials' },
       ]
     },
@@ -30,7 +30,7 @@ export class NavigationDataService {
         description: 'Gestion des tests'
       },
       services: [
-        { id: 'run', name: 'Run Tests', icon: 'play_arrow', route: '/tests/run-tests' },
+        { id: 'run', name: 'Run Tests', icon: 'play_arrow', route: '/tests/run-tests', default: true },
         { id: 'results', name: 'Results', icon: 'assessment', route: '/tests/results', badge: 3 },
       ]
     }
@@ -63,4 +63,5 @@ export class NavigationDataService {
 
     return feature ? feature.feature.id : null;
   }
+
 }

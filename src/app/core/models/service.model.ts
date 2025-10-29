@@ -8,6 +8,7 @@ export interface Service {
   route: string;
   badge?: number;
   isActive?: boolean;
+  default?: boolean
 }
 
 /**

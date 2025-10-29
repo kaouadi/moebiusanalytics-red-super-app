@@ -9,6 +9,7 @@ export interface Feature {
   icon: string;
   route: string;
   description?: string;
+  default?: boolean;
 }
 
 

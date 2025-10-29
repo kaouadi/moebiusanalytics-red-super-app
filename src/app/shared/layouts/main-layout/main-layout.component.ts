@@ -1,7 +1,7 @@
 // main-layout.component.ts
 import { Component, OnInit } from '@angular/core';
-import { Router, NavigationEnd, Event as RouterEvent } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { Router, NavigationEnd, Event as RouterEvent, RoutesRecognized } from '@angular/router';
+import { filter, map, take } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { NavigationService } from '../../../core/services/navigation.service';
 import { Feature } from '../../../core/models/feature.model';
@@ -15,6 +15,7 @@ export class MainLayoutComponent implements OnInit {
   
   drawerOpen$: Observable<boolean>;
   currentFeature$: Observable<Feature | null>;
+  defaultServiceUrl$: Observable<string | null>;
 
   constructor(
     public navService: NavigationService,
@@ -22,7 +23,9 @@ export class MainLayoutComponent implements OnInit {
   ) {
     this.drawerOpen$ = this.navService.drawerOpen$;
     this.currentFeature$ = this.navService.currentFeature$;
+    this.defaultServiceUrl$ = this.navService.defaultServiceUrl$
 
+    /*
     this.router.events.pipe(
       filter((event: RouterEvent): event is NavigationEnd => {
         return event instanceof NavigationEnd;
@@ -30,19 +33,44 @@ export class MainLayoutComponent implements OnInit {
     ).subscribe((event: NavigationEnd) => {
       this.updateCurrentFeature(event.url);
     });
+
+    */
+
+    this.router.events
+  .pipe(
+    filter((event: RouterEvent) : event is RoutesRecognized  => {
+      return event instanceof RoutesRecognized;
+    })
+  )
+  .subscribe((event: RoutesRecognized) => {
+    console.log('URL demandée:', event.url);                // '/'
+    console.log('URL finale:', event.urlAfterRedirects);     // '/tests/dashboard'
+    
+    if (event.url !== event.urlAfterRedirects) {
+      console.log('🔄 REDIRECTION DÉTECTÉE !');
+    }
+      this.updateCurrentFeature(event.urlAfterRedirects);
+  });
   }
 
   ngOnInit(): void {
-    this.updateCurrentFeature(this.router.url);
+    //this.updateCurrentFeature(this.router.url);
   }
 
   private updateCurrentFeature(url: string): void {
     // Extraire le premier segment de l'URL
+
     const firstSegment = this.extractFirstSegment(url);
+
+    console.log('firstSegment', firstSegment)
+    console.log('url', url)
+
     
     if (firstSegment) {
       // Déléguer la logique au service
       this.navService.setCurrentFeatureByRoute(firstSegment);
+
+
     }
   }
 
@@ -65,5 +93,45 @@ export class MainLayoutComponent implements OnInit {
 
   toggleDrawer(): void {
     this.navService.toggleDrawer();
+  }
+
+  private _checkIfDefaultServiceUrl(currentUrl: string): Observable<boolean> {
+    return this.defaultServiceUrl$.pipe(
+      take(1), // Prendre seulement la première valeur
+      map(defaultUrl => {
+        if (!defaultUrl) {
+          console.log('⚠️ Aucun service par défaut défini');
+          return false;
+        }
+
+        const isDefaultService = this._compareUrls(currentUrl, defaultUrl);
+        
+        console.log('Comparaison des URLs:');
+        console.log('  - URL courante:', currentUrl);
+        console.log('  - URL par défaut:', defaultUrl);
+        console.log('  - Résultat:', isDefaultService ? '✅ MATCH' : '❌ NO MATCH');
+        
+        return isDefaultService;
+      })
+    );
+  }
+    private _compareUrls(url1: string, url2: string): boolean {
+    const cleanUrl1 = this._cleanUrl(url1);
+    const cleanUrl2 = this._cleanUrl(url2);
+    
+    return cleanUrl1 === cleanUrl2;
+  }
+
+  /**
+   * Nettoie une URL en retirant query params, fragments et trailing slash
+   */
+  private _cleanUrl(url: string): string {
+    let cleanUrl = url.split('?')[0].split('#')[0];
+    
+    if (cleanUrl.endsWith('/') && cleanUrl.length > 1) {
+      cleanUrl = cleanUrl.slice(0, -1);
+    }
+    
+    return cleanUrl;
   }
 }
